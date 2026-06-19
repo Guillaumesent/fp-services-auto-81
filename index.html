@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="FP Services Auto 81 — Mécanicien indépendant dans le Tarn. Révision, changement de pièces, diagnostic électronique. Vous fournissez les pièces, je fais le reste."/>
+  <title>FP Services Auto 81 — Mécanicien Indépendant Tarn</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,700;1,800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    /* ── Reset ── */
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior: smooth; }
+
+    /* ── Tokens ── */
+    :root {
+      --bg:         #000000;
+      --panel:      #080e18;
+      --panel-h:    #0d1624;
+      --border:     #0f1e33;
+      --border-l:   #162a44;
+      --g-start:    #1d6aff;
+      --g-end:      #0ea5e9;
+      --grad:       linear-gradient(135deg, #1d6aff, #0ea5e9);
+      --grad-text:  linear-gradient(135deg, #60a5fa, #38bdf8);
+      --text:       #d4dff0;
+      --muted:      #3d5a7a;
+      --white:      #ffffff;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* ── Animations ── */
+    @keyframes fadeUp   { from{opacity:0;transform:translateY(26px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes fadeIn   { from{opacity:0} to{opacity:1} }
+    @keyframes pulseDot { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.3;transform:scale(.7)} }
+    @keyframes glowPulse{ 0%,100%{opacity:.7} 50%{opacity:1} }
+
+    .fu { opacity:0; transform:translateY(26px); transition: opacity .65s ease, transform .65s ease; }
+    .fu.visible { opacity:1; transform:translateY(0); }
+    .fd { opacity:0; transition: opacity .6s ease; }
+    .fd.visible { opacity:1; }
+
+    /* ── Nav ── */
+    nav {
+      position: fixed; top:0; left:0; right:0; z-index:200;
+      display: flex; align-items:center; justify-content:space-between;
+      padding: 18px 48px;
+      background: rgba(0,0,0,.92);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo { display:flex; align-items:center; gap:12px; }
+    .nav-logo svg { height:38px; width:auto; }
+    .nav-logo span {
+      font-family:'Archivo',sans-serif; font-weight:700;
+      font-size:18px; letter-spacing:2px; color:var(--white); text-transform:uppercase;
+    }
+    .btn-nav {
+      background: var(--grad); color:#fff; border:none;
+      padding:10px 24px; font-family:'DM Sans',sans-serif;
+      font-weight:700; font-size:13px; letter-spacing:.5px; cursor:pointer;
+      border-radius:10px; transform:skewX(-14deg);
+      transition:opacity .2s, box-shadow .2s;
+    }
+    .btn-nav span { display:inline-block; transform:skewX(14deg); }
+    .btn-nav:hover { opacity:.82; box-shadow:0 4px 14px rgba(29,106,255,.35); }
+
+    /* ── Buttons ── */
+    .btn-p {
+      background: var(--grad); color:#fff; border:none;
+      padding:16px 40px; font-family:'DM Sans',sans-serif;
+      font-weight:700; font-size:15px; cursor:pointer;
+      border-radius:10px; transform:skewX(-14deg); letter-spacing:.5px;
+      display:inline-flex; align-items:center;
+      transition:opacity .2s, transform .15s, box-shadow .2s;
+    }
+    .btn-p span { display:inline-flex; align-items:center; gap:10px; transform:skewX(14deg); }
+    .btn-p:hover { opacity:.85; transform:skewX(-14deg) translateY(-2px); box-shadow:0 8px 28px rgba(29,106,255,.45); }
+
+    .btn-o {
+      background:transparent; color:var(--text);
+      border:2px solid var(--border-l);
+      padding:14px 36px; font-family:'DM Sans',sans-serif;
+      font-weight:600; font-size:15px; cursor:pointer;
+      border-radius:10px; transform:skewX(-14deg); letter-spacing:.5px;
+      transition:border-color .2s, box-shadow .2s, color .2s;
+    }
+    .btn-o span { display:inline-block; transform:skewX(14deg); }
+    .btn-o:hover { border-color:#60a5fa; color:#fff; box-shadow:0 4px 18px rgba(29,106,255,.2); }
+
+    /* ── Section helpers ── */
+    .s-label {
+      font-size:11px; letter-spacing:3px; text-transform:uppercase;
+      color:#60a5fa; margin-bottom:14px;
+    }
+    .s-title {
+      font-family:'Archivo',sans-serif; font-weight:800; font-style:italic;
+      font-size:clamp(32px,4.2vw,48px); letter-spacing:-0.5px; color:var(--white);
+      line-height:1.05; margin-bottom:44px;
+    }
+    section, .stats-wrap { border-top:1px solid var(--border); }
+
+    /* ── Hero ── */
+    #hero {
+      position:relative; min-height:100vh;
+      display:flex; flex-direction:column; justify-content:center;
+      padding:130px 48px 90px; overflow:hidden; background:#000;
+    }
+    .hero-grid {
+      position:absolute; inset:0; z-index:0;
+      background-image:
+        linear-gradient(rgba(29,106,255,.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(29,106,255,.03) 1px, transparent 1px);
+      background-size:52px 52px;
+    }
+    .hero-mtn-l {
+      position:absolute; bottom:18%; left:-5%; width:55%; height:42%; z-index:0;
+      background:linear-gradient(160deg,rgba(8,20,42,0) 0%,rgba(6,16,35,.55) 50%,rgba(4,10,22,.8) 100%);
+      clip-path:polygon(0 100%,18% 30%,35% 55%,50% 15%,65% 45%,80% 20%,100% 60%,100% 100%);
+      filter:blur(4px);
+    }
+    .hero-mtn-r {
+      position:absolute; bottom:18%; right:-5%; width:45%; height:38%; z-index:0;
+      background:linear-gradient(200deg,rgba(4,14,30,0) 0%,rgba(6,18,38,.5) 60%,rgba(3,8,18,.75) 100%);
+      clip-path:polygon(0 60%,20% 25%,40% 50%,55% 10%,75% 40%,90% 20%,100% 55%,100% 100%,0 100%);
+      filter:blur(3px);
+    }
+    .hero-glow-l {
+      position:absolute; bottom:8%; left:15%; width:600px; height:280px; z-index:1;
+      background:radial-gradient(ellipse 80% 40% at 50% 100%,rgba(29,106,255,.2) 0%,transparent 70%);
+      animation:glowPulse 4s ease-in-out infinite;
+    }
+    .hero-glow-r {
+      position:absolute; bottom:8%; right:10%; width:380px; height:200px; z-index:1;
+      background:radial-gradient(ellipse 70% 35% at 50% 100%,rgba(14,165,233,.15) 0%,transparent 70%);
+      animation:glowPulse 4s ease-in-out infinite .8s;
+    }
+    .hero-glow-c {
+      position:absolute; top:20%; left:50%; transform:translateX(-50%);
+      width:900px; height:900px; z-index:0;
+      background:radial-gradient(circle,rgba(10,40,100,.16) 0%,rgba(5,20,50,.05) 40%,transparent 70%);
+    }
+    .hero-line {
+      position:absolute; top:0; right:35%; width:1px; height:100%; z-index:1;
+      background:linear-gradient(to bottom,transparent,rgba(29,106,255,.15),transparent);
+    }
+    .hero-sep {
+      position:absolute; bottom:0; left:0; right:0; height:1px; z-index:2;
+      background:var(--grad); opacity:.35;
+    }
+    .perf-curves {
+      position:absolute; top:50%; left:0; transform:translateY(-50%);
+      width:100%; height:55%; z-index:0;
+      opacity:.22; pointer-events:none;
+    }
+    .perf-curves .grid-line { stroke:rgba(29,106,255,.08); stroke-width:1; }
+    .perf-curves .axis-line { stroke:rgba(29,106,255,.18); stroke-width:1; }
+    .perf-curve-power {
+      fill:none; stroke:#60a5fa; stroke-width:2.5;
+      stroke-dasharray:900; stroke-dashoffset:900;
+      filter:drop-shadow(0 0 6px rgba(96,165,250,.5));
+      animation:drawCurve 2.4s cubic-bezier(.4,0,.2,1) .6s forwards;
+    }
+    .perf-curve-torque {
+      fill:none; stroke:#38bdf8; stroke-width:2;
+      stroke-dasharray:900; stroke-dashoffset:900;
+      opacity:.7;
+      filter:drop-shadow(0 0 5px rgba(56,189,248,.4));
+      animation:drawCurve 2.4s cubic-bezier(.4,0,.2,1) 1s forwards;
+    }
+    .perf-dot {
+      fill:#60a5fa; filter:drop-shadow(0 0 8px rgba(96,165,250,.8));
+      opacity:0; animation:fadeIn .5s ease 2.8s forwards;
+    }
+    .perf-label {
+      font-family:'DM Sans',sans-serif; font-size:9px; letter-spacing:1.5px;
+      text-transform:uppercase; fill:var(--muted); opacity:0;
+      animation:fadeIn .6s ease 2.6s forwards;
+    }
+    @keyframes drawCurve { to { stroke-dashoffset:0; } }
+    @media(max-width:768px){ .perf-curves{ display:none; } }
+
+    .hero-content { position:relative; z-index:3; }
+    .hero-badge {
+      display:inline-flex; align-items:center; gap:8px;
+      border:1px solid rgba(29,106,255,.25); padding:6px 14px; margin-bottom:28px;
+      font-size:11px; letter-spacing:2px; text-transform:uppercase;
+      color:var(--muted); background:rgba(29,106,255,.04);
+      animation: fadeIn .6s ease .1s both;
+    }
+    .badge-dot {
+      width:6px; height:6px; border-radius:50%;
+      background:var(--grad); animation:pulseDot 2s infinite;
+    }
+    .hero-title {
+      font-family:'Archivo',sans-serif; font-weight:800; font-style:italic;
+      font-size:clamp(46px,7vw,92px); line-height:.95; letter-spacing:-1px;
+      color:var(--white); text-shadow:0 0 80px rgba(29,106,255,.18);
+      animation: fadeUp .65s ease .2s both;
+    }
+    .hero-title .accent {
+      background:var(--grad-text);
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+      background-clip:text;
+      filter:drop-shadow(0 0 28px rgba(29,106,255,.4));
+    }
+    .hero-sub {
+      font-size:16px; color:var(--muted); max-width:500px; line-height:1.75;
+      margin-top:28px; margin-bottom:40px;
+      animation: fadeUp .65s ease .35s both;
+    }
+    .hero-sub strong { color:var(--text); }
+    .hero-actions {
+      display:flex; gap:16px; flex-wrap:wrap;
+      animation: fadeUp .65s ease .5s both;
+    }
+    .hero-scroll {
+      position:absolute; bottom:36px; left:48px; z-index:3;
+      display:flex; align-items:center; gap:12px;
+      font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--muted);
+    }
+    .scroll-line {
+      width:36px; height:1px;
+      background:var(--grad); box-shadow:0 0 6px #1d6aff;
+    }
+
+    /* ── USP Banner ── */
+    .usp-banner {
+      padding:28px 48px;
+      background:linear-gradient(135deg,rgba(29,106,255,.10),rgba(14,165,233,.07));
+      border-top:1px solid rgba(29,106,255,.2);
+      border-bottom:1px solid rgba(29,106,255,.2);
+      display:flex; align-items:center; justify-content:flex-start; gap:16px;
+      flex-wrap:wrap; text-align:left;
+    }
+    .usp-banner p { font-size:15px; color:var(--text); max-width:680px; line-height:1.85; text-align:left; }
+    .usp-banner p .line { display:block; }
+    .usp-banner .usp-result {
+      font-family:'Archivo',sans-serif; font-weight:800; font-style:italic;
+      font-size:22px; color:var(--white);
+    }
+    .usp-banner .usp-title {
+      font-family:'Archivo',sans-serif; font-weight:800; font-style:italic;
+      font-size:22px;
+      background:var(--grad-text);
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+    }
+
+    /* ── Services ── */
+    #services { padding:100px 48px; background:#000; }
+    .services-grid {
+      display:grid; grid-template-columns:repeat(3,1fr);
+      gap:1px; background:var(--border);
+    }
+    .scard {
+      background:var(--panel); border-bottom:2px solid transparent;
+      padding:32px 26px; cursor:default; position:relative; overflow:hidden;
+      transition:background .25s, border-color .25s, transform .25s, box-shadow .25s;
+    }
+    .scard:hover {
+      background:var(--panel-h); border-bottom-color:#1d6aff;
+      transform:translateY(-4px); box-shadow:0 12px 36px rgba(29,106,255,.12);
+    }
+    .scard-icon { font-size:26px; display:block; margin-bottom:16px; }
+    .scard-name {
+      font-family:'Archivo',sans-serif; font-weight:700; font-style:italic;
+      font-size:21px; color:var(--white); margin-bottom:10px; letter-spacing:.5px;
+    }
+    .scard-desc { font-size:13px; color:var(--muted); line-height:1.65; margin-bottom:14px; }
+    .tags { display:flex; flex-wrap:wrap; gap:4px; }
+    .tag {
+      padding:3px 10px; border:1px solid var(--border);
+      font-size:10px; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted);
+    }
+    .services-note { margin-top:20px; font-size:13px; color:var(--muted); text-align:center; }
+
+    /* ── Steps ── */
+    #steps {
+      padding:100px 48px;
+      background:var(--panel);
+      border-bottom:1px solid var(--border);
+    }
+    .steps-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
+    .step-card {
+      padding:32px; border:1px solid var(--border); background:var(--panel);
+      position:relative; transition:border-color .25s;
+    }
+    .step-card:hover { border-color:rgba(29,106,255,.4); }
+    .step-num {
+      font-family:'Archivo',sans-serif; font-weight:800; font-style:italic;
+      font-size:52px; line-height:1; opacity:.5; margin-bottom:16px;
+      background:var(--grad-text);
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+    }
+    .step-title {
+      font-family:'Archivo',sans-serif; font-weight:700; font-style:italic;
+      font-size:20px; color:var(--white); margin-bottom:10px;
+    }
+    .step-desc { font-size:13px; color:var(--muted); line-height:1.65; }
+
+    /* ── Stats ── */
+    .stats-wrap {
+      display:grid; grid-template-columns:repeat(4,1fr);
+      background:#000; border-bottom:1px solid var(--border);
+      position:relative; overflow:hidden;
+    }
+    .stats-wrap::after {
+      content:''; position:absolute; top:50%; left:50%;
+      transform:translate(-50%,-50%); width:600px; height:180px;
+      background:radial-gradient(ellipse,rgba(29,106,255,.05) 0%,transparent 70%);
+      pointer-events:none;
+    }
+    .stat-item {
+      padding:50px 36px;
+      position:relative; z-index:1;
+    }
+    .stat-item:not(:last-child) { border-right:1px solid var(--border); }
+    .stat-num {
+      font-family:'Archivo',sans-serif; font-weight:800; font-style:italic;
+      font-size:60px; line-height:1;
+      background:var(--grad-text);
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+    }
+    .stat-num sup { font-size:30px; }
+    .stat-label {
+      font-size:11px; color:var(--muted); letter-spacing:1.5px;
+      text-transform:uppercase; margin-top:8px;
+    }
+
+    /* ── Contact ── */
+    #contact { padding:100px 48px; background:#000; position:relative; overflow:hidden; }
+    #contact::before {
+      content:''; position:absolute; top:30%; right:-10%;
+      width:500px; height:500px; border-radius:50%; pointer-events:none;
+      background:radial-gradient(circle,rgba(29,106,255,.06) 0%,transparent 65%);
+    }
+    .contact-inner { position:relative; z-index:1; max-width:780px; }
+    .contact-grid {
+      display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+      gap:16px; margin-top:48px;
+    }
+    .contact-card {
+      display:flex; gap:16px; align-items:center;
+      padding:20px 24px; background:var(--panel); border:1px solid var(--border);
+    }
+    .contact-icon {
+      font-size:18px; width:44px; height:44px; background:var(--bg);
+      border:1px solid var(--border); display:flex; align-items:center;
+      justify-content:center; flex-shrink:0;
+    }
+    .contact-text { font-size:14px; color:var(--text); line-height:1.5; }
+    .contact-tip {
+      margin-top:32px; padding:20px 24px;
+      background:linear-gradient(135deg,rgba(29,106,255,.08),rgba(14,165,233,.05));
+      border:1px solid rgba(29,106,255,.18);
+      font-size:13px; color:var(--muted); line-height:1.7;
+    }
+    .contact-tip strong { color:var(--text); }
+
+    /* ── Footer ── */
+    footer {
+      padding:30px 48px; background:#000; border-top:1px solid var(--border);
+      display:flex; align-items:center; justify-content:space-between;
+      flex-wrap:wrap; gap:12px;
+    }
+    .footer-logo { display:flex; align-items:center; gap:12px; }
+    .footer-logo svg { height:28px; width:auto; }
+    .footer-logo span {
+      font-family:'Archivo',sans-serif; font-weight:700;
+      font-size:15px; letter-spacing:2px; color:var(--white); text-transform:uppercase;
+    }
+    .footer-contact { font-size:13px; color:var(--muted); }
+    .footer-copy { font-size:12px; color:var(--muted); }
+
+    /* ── Responsive ── */
+    @media(max-width:900px) {
+      .services-grid { grid-template-columns:1fr 1fr; }
+      .steps-grid { grid-template-columns:1fr 1fr; }
+      .stats-wrap { grid-template-columns:1fr 1fr; }
+      .stat-item:nth-child(2) { border-right:none; }
+    }
+    @media(max-width:600px) {
+      nav { padding:16px 24px; }
+      #hero { padding:110px 24px 70px; }
+      #services, #steps, #contact { padding:70px 24px; }
+      .usp-banner { padding:24px; }
+      .stats-wrap { grid-template-columns:1fr 1fr; }
+      .services-grid { grid-template-columns:1fr; }
+      .steps-grid { grid-template-columns:1fr; }
+      .hero-title { font-size:40px; }
+      footer { flex-direction:column; text-align:center; }
+      .footer-contact { text-align:center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══ NAV ══ -->
+<nav>
+  <div class="nav-logo">
+    <svg viewBox="0 0 827 355" xmlns="http://www.w3.org/2000/svg" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+      <defs>
+        <linearGradient id="lg1" x1="0" y1="0" x2="1" y2="0" gradientUnits="userSpaceOnUse" gradientTransform="matrix(312.523,0,0,125.568,-1.62867,61.2813)">
+          <stop offset="0" style="stop-color:rgb(0,0,196);stop-opacity:1"/>
+          <stop offset="1" style="stop-color:rgb(16,63,147);stop-opacity:1"/>
+        </linearGradient>
+      </defs>
+      <g transform="matrix(1.40886,0,0,1.40886,-169.015,-111.115)">
+        <g transform="matrix(1.87774,0,0,1.87774,123.024,89.5499)">
+          <path d="M-1.33,123.314C-1.366,123.262 -1.4,123.208 -1.431,123.152C-1.712,122.635 -1.692,122.007 -1.38,121.509L68.467,10.147C75.735,-1.442 85.457,-1.502 85.457,-1.502L85.49,-1.503L88.458,-1.497C88.54,-1.502 88.583,-1.503 88.583,-1.503L148.821,-1.451L148.82,-1.397L154.849,-1.399L231.033,-1.503C231.033,-1.503 231.023,-1.479 231.002,-1.433L274.249,-1.453C274.249,-1.453 292.18,-1.508 302.954,11.811C307.554,17.495 310.884,25.616 310.895,37.254C310.895,37.409 310.894,37.563 310.893,37.717C310.894,37.831 310.895,37.945 310.895,38.059C310.914,58.861 300.209,68.347 290.373,72.673C281.475,76.802 273.051,76.758 273.051,76.758L273.049,76.758L194.359,76.159L171.793,112.893C168.402,118.411 163.84,121.306 157.18,122.753C152.38,123.796 146.433,124.066 138.961,124.065C136.593,124.066 134.071,124.038 131.381,124L131.396,123.977C130.915,123.89 130.492,123.59 130.254,123.152C129.973,122.635 129.993,122.007 130.305,121.509L177.255,46.654C177.553,46.179 178.074,45.891 178.634,45.891L258.247,45.891L258.247,45.71L273.187,45.675C273.192,45.675 275.399,45.653 277.181,44.068C278.434,42.953 279.411,41.071 279.432,37.984C279.456,34.375 278.523,32.206 277.289,30.935C275.656,29.253 273.615,29.266 273.615,29.266L273.577,29.267L141.894,29.218L91.391,29.206L80.823,45.975L142.568,45.891C143.117,45.89 143.629,46.166 143.931,46.624C144.232,47.083 144.283,47.663 144.065,48.166C144.065,48.166 139.671,58.311 132.73,66.423C127.884,72.087 121.78,76.682 115.133,76.674L62.397,76.609L40.108,112.893C36.717,118.411 32.155,121.306 25.495,122.753C19.226,124.116 11.001,124.159 -0.023,124.003C-0.304,123.999 -0.574,123.922 -0.809,123.787C-1.081,123.784 -1.354,123.78 -1.629,123.776L-1.33,123.314Z" style="fill:url(#lg1);"/>
+        </g>
+        <g transform="matrix(1.87774,0,0,1.87774,123.024,89.5499)">
+          <path d="M258.247,45.891L258.247,45.71L273.187,45.675C273.192,45.675 275.399,45.653 277.181,44.068C278.434,42.953 279.411,41.071 279.432,37.984C279.456,34.375 278.523,32.206 277.289,30.935C275.656,29.253 273.615,29.266 273.615,29.266L273.577,29.267L141.894,29.218L91.518,29.206L81.216,45.976L142.568,45.891C143.117,45.89 143.629,46.166 143.931,46.624C144.232,47.083 144.283,47.663 144.065,48.166C144.065,48.166 139.671,58.311 132.73,66.423C127.884,72.087 121.78,76.682 115.133,76.674L62.397,76.609L40.108,112.893C36.717,118.411 32.155,121.306 25.495,122.753C19.226,124.116 11.001,124.159 -0.023,124.003C-0.611,123.994 -1.15,123.669 -1.431,123.152C-1.712,122.635 -1.692,122.007 -1.38,121.509L68.467,10.147C75.735,-1.442 85.457,-1.502 85.457,-1.502L85.49,-1.503L142.57,-1.394L274.249,-1.453C274.249,-1.453 292.18,-1.508 302.954,11.811C307.554,17.495 310.884,25.616 310.895,37.254C310.906,49.162 307.474,57.463 302.722,63.269C291.601,76.855 273.051,76.758 273.051,76.758L273.049,76.758L194.359,76.159L171.793,112.893C168.402,118.411 163.84,121.306 157.18,122.753C150.912,124.116 142.686,124.159 131.662,124.003C131.074,123.994 130.536,123.669 130.254,123.152C129.973,122.635 129.993,122.007 130.305,121.509L177.255,46.654C177.553,46.179 178.074,45.891 178.634,45.891L258.247,45.891ZM258.431,48.967L258.251,49.148L179.535,49.148L134.605,120.783C143.872,120.886 150.964,120.771 156.488,119.57C162.184,118.333 166.118,115.906 169.017,111.187L192.065,73.671C192.363,73.185 192.894,72.89 193.465,72.895L273.071,73.5C273.167,73.501 290.066,73.587 300.201,61.205C304.571,55.867 307.648,48.208 307.637,37.258C307.627,26.566 304.647,19.082 300.422,13.859C290.607,1.727 274.261,1.805 274.261,1.805L274.256,1.805L142.569,1.863L142.565,1.863L85.499,1.755C85.066,1.777 77.233,2.3 71.227,11.877L2.92,120.783C12.187,120.886 19.279,120.771 24.803,119.57C30.499,118.333 34.433,115.906 37.332,111.187L60.099,74.127C60.396,73.644 60.922,73.35 61.489,73.351L115.137,73.417C120.898,73.424 126.055,69.214 130.255,64.305C134.905,58.871 138.356,52.481 140.002,49.152L78.303,49.238C77.713,49.238 77.169,48.92 76.88,48.405C76.592,47.89 76.604,47.259 76.913,46.756L89.219,26.724C89.516,26.242 90.041,25.948 90.607,25.948L141.895,25.961L273.563,26.009C273.862,26.006 277.066,26.03 279.626,28.666C281.272,30.361 282.722,33.191 282.69,38.006C282.66,42.351 281.109,44.933 279.346,46.502C276.606,48.939 273.195,48.933 273.195,48.933L258.431,48.967Z" style="fill:rgb(254,254,254);"/>
+        </g>
+      </g>
+    </svg>
+    <span>Services Auto 81</span>
+  </div>
+  <button class="btn-nav" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">
+    <span>Prendre RDV</span>
+  </button>
+</nav>
+
+<!-- ══ HERO ══ -->
+<section id="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-line"></div>
+  <div class="hero-sep"></div>
+
+  <svg class="perf-curves" viewBox="0 0 600 340" preserveAspectRatio="none">
+    <!-- Grille de fond -->
+    <line class="grid-line" x1="0" y1="60"  x2="600" y2="60"/>
+    <line class="grid-line" x1="0" y1="120" x2="600" y2="120"/>
+    <line class="grid-line" x1="0" y1="180" x2="600" y2="180"/>
+    <line class="grid-line" x1="0" y1="240" x2="600" y2="240"/>
+    <line class="grid-line" x1="100" y1="0" x2="100" y2="300"/>
+    <line class="grid-line" x1="200" y1="0" x2="200" y2="300"/>
+    <line class="grid-line" x1="300" y1="0" x2="300" y2="300"/>
+    <line class="grid-line" x1="400" y1="0" x2="400" y2="300"/>
+    <line class="grid-line" x1="500" y1="0" x2="500" y2="300"/>
+
+    <!-- Axes -->
+    <line class="axis-line" x1="0" y1="300" x2="600" y2="300"/>
+    <line class="axis-line" x1="0" y1="0"   x2="0" y2="300"/>
+
+    <!-- Courbe de puissance (montée progressive, pic, légère retombée) -->
+    <path class="perf-curve-power"
+      d="M0,290 C80,260 130,150 200,100 C260,58 320,38 380,32 C440,28 480,40 520,65 C550,85 580,110 600,140"/>
+
+    <!-- Courbe de couple (pic plus tôt, plus arrondie) -->
+    <path class="perf-curve-torque"
+      d="M0,270 C60,200 110,120 170,90 C230,62 290,55 350,68 C410,82 470,110 520,150 C550,172 580,195 600,215"/>
+
+    <!-- Point culminant -->
+    <circle class="perf-dot" cx="380" cy="32" r="4"/>
+
+    <!-- Labels -->
+    <text class="perf-label" x="6" y="20">PUISSANCE</text>
+    <text class="perf-label" x="6" y="305" fill="var(--muted)">RÉGIME MOTEUR</text>
+  </svg>
+
+  <div class="hero-content">
+    <div class="hero-badge">
+      <div class="badge-dot"></div>
+      Mécanicien indépendant — Tarn (81)
+    </div>
+    <div class="hero-title">
+      VOUS FOURNISSEZ<br>
+      <span class="accent">LES PIÈCES.</span><br>
+      JE FAIS LE RESTE.
+    </div>
+    <p class="hero-sub">
+      Révision, changement de pièces, diagnostic, réglages… Je prends en charge toutes les interventions mécaniques. <strong>Vous payez uniquement la main-d'œuvre.</strong>
+    </p>
+    <div class="hero-actions">
+      <button class="btn-p" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">
+        <span>Prendre rendez-vous →</span>
+      </button>
+      <button class="btn-o">
+        <span>07 61 77 84 35</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    Découvrir
+  </div>
+</section>
+
+<!-- ══ USP ══ -->
+<div class="usp-banner">
+  <p>
+    <span class="usp-title line">VOUS ACHETEZ. JE MONTE. C'EST TOUT.</span>
+    <span class="line">Pas de marge cachée sur les pièces : vous les choisissez où vous voulez.</span>
+    <span class="line">Je facture uniquement mon savoir-faire.</span>
+    <span class="line usp-result">JUSQU'À 50&nbsp;% D'ÉCONOMIES.</span>
+  </p>
+</div>
+
+<!-- ══ SERVICES ══ -->
+<section id="services">
+  <p class="s-label">Ce qu'on fait</p>
+  <h2 class="s-title">NOS PRESTATIONS</h2>
+  <div class="services-grid">
+    <div class="scard fu">
+      <span class="scard-icon">🛞</span>
+      <div class="scard-name">Pneumatiques</div>
+      <div class="scard-desc">Montage, démontage et équilibrage sur tous types de véhicules. Pneus été, hiver ou 4 saisons.</div>
+      <div class="tags"><span class="tag">Montage</span><span class="tag">Démontage</span><span class="tag">Équilibrage</span></div>
+    </div>
+    <div class="scard fu">
+      <span class="scard-icon">🔧</span>
+      <div class="scard-name">Révision Complète</div>
+      <div class="scard-desc">Vidange, filtres, bougies, courroies, liquides. Vérification générale de votre véhicule.</div>
+      <div class="tags"><span class="tag">Vidange</span><span class="tag">Filtres</span><span class="tag">Contrôle 50 pts</span></div>
+    </div>
+    <div class="scard fu">
+      <span class="scard-icon">🔩</span>
+      <div class="scard-name">Remplacement de Pièces</div>
+      <div class="scard-desc">Freins, amortisseurs, embrayage, distribution, radiateur… Toutes interventions mécaniques.</div>
+      <div class="tags"><span class="tag">Freinage</span><span class="tag">Suspension</span><span class="tag">Moteur</span></div>
+    </div>
+    <div class="scard fu">
+      <span class="scard-icon">⚡</span>
+      <div class="scard-name">Diagnostic Électronique</div>
+      <div class="scard-desc">Lecture et effacement des codes erreurs OBD. Analyse complète avant tout devis.</div>
+      <div class="tags"><span class="tag">OBD</span><span class="tag">Codes erreurs</span><span class="tag">Rapport</span></div>
+    </div>
+    <div class="scard fu">
+      <span class="scard-icon">🎯</span>
+      <div class="scard-name">Réglages & Mise au Point</div>
+      <div class="scard-desc">Carburation, allumage, distribution, vidange de boîte. Toutes les démarches pour remettre votre voiture d'aplomb.</div>
+      <div class="tags"><span class="tag">Distribution</span><span class="tag">Carburation</span><span class="tag">Allumage</span></div>
+    </div>
+    <div class="scard fu">
+      <span class="scard-icon">🔍</span>
+      <div class="scard-name">Pré-diagnostic & Devis</div>
+      <div class="scard-desc">J'inspecte votre véhicule et j'établis un devis précis avant toute intervention.</div>
+      <div class="tags"><span class="tag">Inspection</span><span class="tag">Devis gratuit</span><span class="tag">Transparence</span></div>
+    </div>
+  </div>
+  <p class="services-note">Cette liste n'est pas exhaustive — si vous avez un besoin spécifique, appelez-moi directement.</p>
+</section>
+
+<!-- ══ STEPS ══ -->
+<section id="steps">
+  <p class="s-label">Simple & transparent</p>
+  <h2 class="s-title">COMMENT ÇA MARCHE ?</h2>
+  <div class="steps-grid">
+    <div class="step-card fu">
+      <div class="step-num">01</div>
+      <div class="step-title">Vous trouvez vos pièces</div>
+      <div class="step-desc">Commandez vos pièces en ligne ou en magasin. Je peux vous conseiller sur les références compatibles.</div>
+    </div>
+    <div class="step-card fu">
+      <div class="step-num">02</div>
+      <div class="step-title">Vous prenez rendez-vous</div>
+      <div class="step-desc">Appelez directement ou envoyez un email. Créneau confirmé rapidement.</div>
+    </div>
+    <div class="step-card fu">
+      <div class="step-num">03</div>
+      <div class="step-title">J'interviens</div>
+      <div class="step-desc">Pose professionnelle, minutieuse. Un mécanicien qui prend soin de votre véhicule comme du sien.</div>
+    </div>
+    <div class="step-card fu">
+      <div class="step-num">04</div>
+      <div class="step-title">Vous payez la main-d'œuvre</div>
+      <div class="step-desc">Rien de plus, rien de caché. Tarif juste, transparent, annoncé avant de commencer.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ STATS ══ -->
+<div class="stats-wrap">
+  <div class="stat-item fd">
+    <div class="stat-num">13<sup>ans+</sup></div>
+    <div class="stat-label">D'expérience</div>
+  </div>
+  <div class="stat-item fd">
+    <div class="stat-num">2600<sup>+</sup></div>
+    <div class="stat-label">Véhicules traités</div>
+  </div>
+  <div class="stat-item fd">
+    <div class="stat-num">98<sup>%</sup></div>
+    <div class="stat-label">Clients satisfaits</div>
+  </div>
+  <div class="stat-item fd">
+    <div class="stat-num">0<sup> €</sup></div>
+    <div class="stat-label">De frais de pièces facturés</div>
+  </div>
+</div>
+
+<!-- ══ CONTACT ══ -->
+<section id="contact">
+  <div class="contact-inner">
+    <p class="s-label">Disponible 5j/7</p>
+    <h2 class="s-title">CONTACTEZ<br>FABRICE</h2>
+    <p style="color:var(--muted);line-height:1.8;font-size:15px;max-width:500px;">
+      Appelez-moi directement ou envoyez-moi un email. Je vous réponds rapidement et j'établis un devis avant toute intervention. Diagnostic gratuit, sans engagement.
+    </p>
+    <div class="contact-grid">
+      <div class="contact-card fu">
+        <div class="contact-icon">👤</div>
+        <div class="contact-text">Fabrice Pochon<br>Mécanicien indépendant</div>
+      </div>
+      <div class="contact-card fu">
+        <div class="contact-icon">📞</div>
+        <div class="contact-text">07 61 77 84 35</div>
+      </div>
+      <div class="contact-card fu">
+        <div class="contact-icon">✉️</div>
+        <div class="contact-text">fp.services81@gmail.com</div>
+      </div>
+      <div class="contact-card fu">
+        <div class="contact-icon">📍</div>
+        <div class="contact-text">Tarn — Département 81</div>
+      </div>
+    </div>
+    <div class="contact-tip">
+      💡 <strong>Pensez à préciser la marque, le modèle et l'année de votre véhicule.</strong><br>
+      Ça fait gagner du temps à tout le monde.
+    </div>
+  </div>
+</section>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <div class="footer-logo">
+    <svg viewBox="0 0 827 355" xmlns="http://www.w3.org/2000/svg" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+      <defs>
+        <linearGradient id="lg2" x1="0" y1="0" x2="1" y2="0" gradientUnits="userSpaceOnUse" gradientTransform="matrix(312.523,0,0,125.568,-1.62867,61.2813)">
+          <stop offset="0" style="stop-color:rgb(0,0,196);stop-opacity:1"/>
+          <stop offset="1" style="stop-color:rgb(16,63,147);stop-opacity:1"/>
+        </linearGradient>
+      </defs>
+      <g transform="matrix(1.40886,0,0,1.40886,-169.015,-111.115)">
+        <g transform="matrix(1.87774,0,0,1.87774,123.024,89.5499)">
+          <path d="M-1.33,123.314C-1.366,123.262 -1.4,123.208 -1.431,123.152C-1.712,122.635 -1.692,122.007 -1.38,121.509L68.467,10.147C75.735,-1.442 85.457,-1.502 85.457,-1.502L85.49,-1.503L88.458,-1.497C88.54,-1.502 88.583,-1.503 88.583,-1.503L148.821,-1.451L148.82,-1.397L154.849,-1.399L231.033,-1.503C231.033,-1.503 231.023,-1.479 231.002,-1.433L274.249,-1.453C274.249,-1.453 292.18,-1.508 302.954,11.811C307.554,17.495 310.884,25.616 310.895,37.254C310.895,37.409 310.894,37.563 310.893,37.717C310.894,37.831 310.895,37.945 310.895,38.059C310.914,58.861 300.209,68.347 290.373,72.673C281.475,76.802 273.051,76.758 273.051,76.758L273.049,76.758L194.359,76.159L171.793,112.893C168.402,118.411 163.84,121.306 157.18,122.753C152.38,123.796 146.433,124.066 138.961,124.065C136.593,124.066 134.071,124.038 131.381,124L131.396,123.977C130.915,123.89 130.492,123.59 130.254,123.152C129.973,122.635 129.993,122.007 130.305,121.509L177.255,46.654C177.553,46.179 178.074,45.891 178.634,45.891L258.247,45.891L258.247,45.71L273.187,45.675C273.192,45.675 275.399,45.653 277.181,44.068C278.434,42.953 279.411,41.071 279.432,37.984C279.456,34.375 278.523,32.206 277.289,30.935C275.656,29.253 273.615,29.266 273.615,29.266L273.577,29.267L141.894,29.218L91.391,29.206L80.823,45.975L142.568,45.891C143.117,45.89 143.629,46.166 143.931,46.624C144.232,47.083 144.283,47.663 144.065,48.166C144.065,48.166 139.671,58.311 132.73,66.423C127.884,72.087 121.78,76.682 115.133,76.674L62.397,76.609L40.108,112.893C36.717,118.411 32.155,121.306 25.495,122.753C19.226,124.116 11.001,124.159 -0.023,124.003C-0.304,123.999 -0.574,123.922 -0.809,123.787C-1.081,123.784 -1.354,123.78 -1.629,123.776L-1.33,123.314Z" style="fill:url(#lg2);"/>
+        </g>
+        <g transform="matrix(1.87774,0,0,1.87774,123.024,89.5499)">
+          <path d="M258.247,45.891L258.247,45.71L273.187,45.675C273.192,45.675 275.399,45.653 277.181,44.068C278.434,42.953 279.411,41.071 279.432,37.984C279.456,34.375 278.523,32.206 277.289,30.935C275.656,29.253 273.615,29.266 273.615,29.266L273.577,29.267L141.894,29.218L91.518,29.206L81.216,45.976L142.568,45.891C143.117,45.89 143.629,46.166 143.931,46.624C144.232,47.083 144.283,47.663 144.065,48.166C144.065,48.166 139.671,58.311 132.73,66.423C127.884,72.087 121.78,76.682 115.133,76.674L62.397,76.609L40.108,112.893C36.717,118.411 32.155,121.306 25.495,122.753C19.226,124.116 11.001,124.159 -0.023,124.003C-0.611,123.994 -1.15,123.669 -1.431,123.152C-1.712,122.635 -1.692,122.007 -1.38,121.509L68.467,10.147C75.735,-1.442 85.457,-1.502 85.457,-1.502L85.49,-1.503L142.57,-1.394L274.249,-1.453C274.249,-1.453 292.18,-1.508 302.954,11.811C307.554,17.495 310.884,25.616 310.895,37.254C310.906,49.162 307.474,57.463 302.722,63.269C291.601,76.855 273.051,76.758 273.051,76.758L273.049,76.758L194.359,76.159L171.793,112.893C168.402,118.411 163.84,121.306 157.18,122.753C150.912,124.116 142.686,124.159 131.662,124.003C131.074,123.994 130.536,123.669 130.254,123.152C129.973,122.635 129.993,122.007 130.305,121.509L177.255,46.654C177.553,46.179 178.074,45.891 178.634,45.891L258.247,45.891ZM258.431,48.967L258.251,49.148L179.535,49.148L134.605,120.783C143.872,120.886 150.964,120.771 156.488,119.57C162.184,118.333 166.118,115.906 169.017,111.187L192.065,73.671C192.363,73.185 192.894,72.89 193.465,72.895L273.071,73.5C273.167,73.501 290.066,73.587 300.201,61.205C304.571,55.867 307.648,48.208 307.637,37.258C307.627,26.566 304.647,19.082 300.422,13.859C290.607,1.727 274.261,1.805 274.261,1.805L274.256,1.805L142.569,1.863L142.565,1.863L85.499,1.755C85.066,1.777 77.233,2.3 71.227,11.877L2.92,120.783C12.187,120.886 19.279,120.771 24.803,119.57C30.499,118.333 34.433,115.906 37.332,111.187L60.099,74.127C60.396,73.644 60.922,73.35 61.489,73.351L115.137,73.417C120.898,73.424 126.055,69.214 130.255,64.305C134.905,58.871 138.356,52.481 140.002,49.152L78.303,49.238C77.713,49.238 77.169,48.92 76.88,48.405C76.592,47.89 76.604,47.259 76.913,46.756L89.219,26.724C89.516,26.242 90.041,25.948 90.607,25.948L141.895,25.961L273.563,26.009C273.862,26.006 277.066,26.03 279.626,28.666C281.272,30.361 282.722,33.191 282.69,38.006C282.66,42.351 281.109,44.933 279.346,46.502C276.606,48.939 273.195,48.933 273.195,48.933L258.431,48.967Z" style="fill:rgb(254,254,254);"/>
+        </g>
+      </g>
+    </svg>
+    <span>Services Auto 81</span>
+  </div>
+  <div class="footer-contact">fp.services81@gmail.com · 07 61 77 84 35</div>
+  <div class="footer-copy">© 2026 Fabrice Pochon</div>
+</footer>
+
+<script>
+  // Scroll animations via IntersectionObserver
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        // Stagger delay for siblings
+        const siblings = entry.target.parentElement.querySelectorAll('.fu, .fd');
+        siblings.forEach((el, idx) => {
+          setTimeout(() => el.classList.add('visible'), idx * 90);
+        });
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.fu, .fd').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
